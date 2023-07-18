@@ -1,0 +1,19 @@
+.root {
+  text-align: center;
+
+  height: 70vh;
+}
+
+.span {
+  font-size: 90px;
+  color: #fe5f1e;
+  & > img {
+    width: 8rem;
+    height: auto;
+  }
+}
+
+.description {
+  font-size: 24px;
+  font-style: italic;
+}
