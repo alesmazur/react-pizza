@@ -1,0 +1,38 @@
+.root {
+  display: flex;
+  justify-content: center;
+  & a {
+    display: inline-flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #fe5f1e;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 10px;
+    transition: all 0.3 ease-in-out;
+    cursor: pointer;
+    color: #fe5f1e;
+    transition: all 0.3 ease-in-out;
+
+    &:hover {
+      background-color: #fe5f1e;
+      color: aliceblue;
+    }
+  }
+
+  :global {
+    .selected {
+      a {
+        background-color: #fe5f1e;
+        color: aliceblue;
+      }
+    }
+  }
+  :first-child a,
+  :last-child a {
+    background-color: #fff;
+    color: #fe5f1e;
+  }
+}
