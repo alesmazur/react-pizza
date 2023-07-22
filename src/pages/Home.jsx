@@ -4,8 +4,10 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
+import { SearchContext } from "../App";
 
-export default function Home({ searchValue }) {
+export default function Home() {
+  const { searchValue, setSearchValue } = React.useContext(SearchContext);
   //numbers of skeletons
   const skeletonArray = [...new Array(8)];
   //skeleton handle
