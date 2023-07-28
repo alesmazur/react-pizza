@@ -5,23 +5,28 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryId } from "../redux/slices/filterSlice";
+import axios from "axios";
 
 export default function Home() {
-  const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const { categoryId, sort } = useSelector((state) => state.filter);
+  const sortType = sort.sortProperty;
+
+  const dispatch = useDispatch();
+
+  const { searchValue } = React.useContext(SearchContext);
   //numbers of skeletons
   const skeletonArray = [...new Array(8)];
   //skeleton handle
   const [isLoading, setIsLoading] = useState(true);
   //pizzas from server
   const [items, setItems] = useState([]);
-  // STATES OF CHILDS
-  //active category state
-  const [categoryId, setCategoryId] = useState(0);
-  //active sort state
-  const [sortType, setSortType] = useState({
-    name: "popular",
-    sortProperty: "rating",
-  });
+
+  const onClickCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
+
   // pages states for pagination
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,27 +50,31 @@ in my case it was made by search variable and puttig it in fetch url query param
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
-        categoryId == 0 ? "" : categoryId
-      }&sortby=${sortType.sortProperty}&order=desc&${search}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json);
+    // fetch(
+    //   `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
+    //     categoryId == 0 ? "" : categoryId
+    //   }&sortby=${sortType.sortProperty}&order=desc&${search}`
+    // )
+    axios
+      .get(
+        `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
+          categoryId == 0 ? "" : categoryId
+        }&sortby=${sortType.sortProperty}&order=desc&${search}`
+      )
+      .then((res) => {
+        setItems(res.data);
+
         setIsLoading(false);
-        window.scrollTo(0, 0);
-      });
+      })
+      .catch((err) => console.log(err.message.toUpper));
+    // window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categoryId}
-          onClickCategory={(id) => setCategoryId(id)}
-        />
-        <Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
+        <Categories value={categoryId} onClickCategory={onClickCategory} />
+        <Sort />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>

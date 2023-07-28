@@ -1,13 +1,34 @@
 import React from "react";
 import styles from "./Search.module.scss";
+import debounce from "lodash.debounce";
 import { SearchContext } from "../../App";
 
 export default function Search() {
+  const [value, setValue] = React.useState();
+  const [firstName, setFirstName] = React.useState("");
   const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const inputRef = React.useRef();
+  const onClickClear = () => {
+    setValue("");
+    setSearchValue("");
+    inputRef.current.focus();
+  };
+  const updateSearchValue = React.useCallback(
+    debounce((str) => {
+      
+      setSearchValue(str);
+    }, 666),
+    []
+  );
+
+  const onChangeInput = (event) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
+  };
 
   return (
     <div className={styles.root}>
-      {!searchValue && (
+      {!value && (
         <svg
           className={styles.searchicon}
           id="searchIcon"
@@ -38,17 +59,18 @@ export default function Search() {
         </svg>
       )}
       <input
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        ref={inputRef}
+        value={value}
+        onChange={onChangeInput}
         className={styles.input}
         type="text"
         placeholder="Find me a pizza ..."
       />
-      {searchValue && (
+      {value && (
         <svg
-          onClick={() => setSearchValue("")}
+          onClick={onClickClear}
           className={styles.clearIcon}
-          enable-background="new 0 0 512 512"
+          enableBackground="new 0 0 512 512"
           height="18px"
           width="18px"
           version="1.1"
