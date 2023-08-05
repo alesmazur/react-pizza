@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "./NotFoundBlock.module.scss";
-import notFoundImg from "../../assets/img/not_foud_pizza.jpeg";
+import styles from "./NotFoundBlock/NotFoundBlock.module.scss";
 
-export default function NotFoundBlock() {
+import notFoundImg from "./../assets/img/not_foud_pizza.jpeg";
+
+export default function EmptyCart() {
   return (
     <div className={styles.root}>
       <span className={styles.span}>
@@ -11,15 +12,15 @@ export default function NotFoundBlock() {
       </span>
       <br />
       <h1>
-        <div>Page not Found.</div>
+        <div>Your cart is empty.</div>
       </h1>
       <div className={styles.description}>
-        Unfortunately the page you are requesting does not exist!
+        Go to main page to find some super tasty pizzas !
       </div>
       <br />
 
       <Link to="/" className="button button--outline button--add ">
-        Main Page
+        I'm hungry
       </Link>
     </div>
   );

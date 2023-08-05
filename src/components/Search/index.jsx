@@ -5,9 +5,9 @@ import { SearchContext } from "../../App";
 
 export default function Search() {
   const [value, setValue] = React.useState();
-  const [firstName, setFirstName] = React.useState("");
   const { searchValue, setSearchValue } = React.useContext(SearchContext);
   const inputRef = React.useRef();
+
   const onClickClear = () => {
     setValue("");
     setSearchValue("");
@@ -15,9 +15,8 @@ export default function Search() {
   };
   const updateSearchValue = React.useCallback(
     debounce((str) => {
-      
       setSearchValue(str);
-    }, 666),
+    }, 555),
     []
   );
 

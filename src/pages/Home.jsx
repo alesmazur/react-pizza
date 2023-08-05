@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import qs from "qs";
+import { useNavigate } from "react-router-dom";
+
+import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
-import { useSelector, useDispatch } from "react-redux";
-import { setCategoryId } from "../redux/slices/filterSlice";
-import axios from "axios";
 
 export default function Home() {
-  const { categoryId, sort } = useSelector((state) => state.filter);
-  const sortType = sort.sortProperty;
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { categoryId, sort, currentPage } = useSelector(
+    (state) => state.filter
+  );
+  const sortType = sort.sortProperty;
 
   const { searchValue } = React.useContext(SearchContext);
   //numbers of skeletons
@@ -28,7 +33,7 @@ export default function Home() {
   };
 
   // pages states for pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
 
   // banck end pizzas filtering
   const search = searchValue ? ` &search = ${searchValue}` : "";
@@ -48,6 +53,10 @@ in my case it was made by search variable and puttig it in fetch url query param
     .map((props) => <PizzaBlock key={props.id} {...props} />);
   const skeletons = skeletonArray.map((el, ind) => <Skeleton key={ind} />);
 
+  const onChangePage = (number) => {
+    dispatch(setCurrentPage(number));
+  };
+
   useEffect(() => {
     setIsLoading(true);
     // fetch(
@@ -63,11 +72,19 @@ in my case it was made by search variable and puttig it in fetch url query param
       )
       .then((res) => {
         setItems(res.data);
-
         setIsLoading(false);
       })
       .catch((err) => console.log(err.message.toUpper));
     // window.scrollTo(0, 0);
+  }, [categoryId, sortType, searchValue, currentPage]);
+
+  useEffect(() => {
+    const queryString = qs.stringify({
+      sortProperty: sort.sortProperty,
+      categoryId,
+      currentPage,
+    });
+    // navigate(`${queryString}`);
   }, [categoryId, sortType, searchValue, currentPage]);
 
   return (
@@ -78,7 +95,7 @@ in my case it was made by search variable and puttig it in fetch url query param
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
 }
