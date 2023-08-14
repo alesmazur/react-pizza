@@ -61,12 +61,13 @@ export default function Home() {
 
   useEffect(() => {
     setIsLoading(true);
-
     axios
       .get(
         `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
           categoryId == 0 ? "" : categoryId
-        }&sortby=${sortType.sortProperty}&order=desc&${search}`
+        }&sortby=${sortType.replace("-", "")}&order=${
+          sortType.includes("-") ? "asc" : "desc"
+        }&${search}`
       )
       .then((res) => {
         setItems(res.data);
@@ -75,7 +76,6 @@ export default function Home() {
       .catch((err) => {
         alert(err.message);
         console.warn(err.message.toUpper);
-        setIsLoading(false);
       })
       .finally(() => {
         setIsLoading(false);

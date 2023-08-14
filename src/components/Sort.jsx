@@ -19,9 +19,12 @@ export default function Sort() {
   });
   // list of items in the sort menu bar
   const list = [
-    { name: "popular", sortProperty: "rating" },
-    { name: "price", sortProperty: "price" },
-    { name: "name", sortProperty: "title" },
+    { name: "popular (DESC)", sortProperty: "rating" },
+    { name: "popular (ASC)", sortProperty: "-rating" },
+    { name: "price (DESC)", sortProperty: "price" },
+    { name: "price (ASC)", sortProperty: "-price" },
+    { name: "name (DESC)", sortProperty: "title" },
+    { name: "name (ASC)", sortProperty: "-title" },
   ];
 
   const onClickListItem = (obj) => {
