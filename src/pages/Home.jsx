@@ -18,16 +18,19 @@ export default function Home() {
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
+  // const items = useSelector((state) => state.pizza.items);
+
   const sortType = sort.sortProperty;
 
   const { searchValue } = React.useContext(SearchContext);
   //numbers of skeletons
-  const skeletonArray = [...new Array(8)];
+  const skeletonArray = [...new Array(4)];
   //skeleton handle
   const [isLoading, setIsLoading] = useState(true);
   //pizzas from server
   const [items, setItems] = useState([]);
 
+  //RTK for filtering pizzas
   const onClickCategory = (id) => {
     dispatch(setCategoryId(id));
   };
@@ -35,13 +38,12 @@ export default function Home() {
   // pages states for pagination
   // const [currentPage, setCurrentPage] = useState(1);
 
-  // banck end pizzas filtering
+  // back end pizzas filtering
   const search = searchValue ? ` &search = ${searchValue}` : "";
 
   {
-    /*pizzas filtering on front end side, 
-  but we also can make  filtering on back end,
-in my case it was made by search variable and puttig it in fetch url query params*/
+    /*pizzas filtering on front end , 
+  but we also can make  filtering on back end,*/
   }
   const pizzas = items
     .filter((obj) => {
@@ -59,11 +61,7 @@ in my case it was made by search variable and puttig it in fetch url query param
 
   useEffect(() => {
     setIsLoading(true);
-    // fetch(
-    //   `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
-    //     categoryId == 0 ? "" : categoryId
-    //   }&sortby=${sortType.sortProperty}&order=desc&${search}`
-    // )
+
     axios
       .get(
         `https://64649b2d043c103502bdc4e9.mockapi.io/api/pizza/items?page=${currentPage}&limit=4&category=${
@@ -74,7 +72,14 @@ in my case it was made by search variable and puttig it in fetch url query param
         setItems(res.data);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message.toUpper));
+      .catch((err) => {
+        alert(err.message);
+        console.warn(err.message.toUpper);
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     // window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
