@@ -188,7 +188,7 @@ body {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 13%;
+      width: 10%;
 
       &-minus {
         svg {
@@ -199,7 +199,7 @@ body {
       }
 
       b {
-        font-size: 22px;
+        font-size: 1.5rem;
       }
     }
 
@@ -213,6 +213,9 @@ body {
         font-weight: bold;
         font-size: 22px;
         letter-spacing: 0.01em;
+        @media (max-width: 380px) {
+          font-size: 1rem;
+        }
       }
     }
 
@@ -258,6 +261,12 @@ body {
 
       span {
         font-size: 22px;
+
+        & {
+          @media (max-width: 380px) {
+            font-size: 1rem;
+          }
+        }
 
         &:last-of-type {
           b {

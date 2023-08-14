@@ -131,7 +131,7 @@ export default function Cart() {
                 ></path>
               </svg>
 
-              <Link to="/">
+              <Link to="/home">
                 <span>Main Page</span>
               </Link>
             </a>
