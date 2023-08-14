@@ -19,7 +19,7 @@ export default function EmptyCart() {
       </div>
       <br />
 
-      <Link to="/" className="button button--outline button--add ">
+      <Link to="/home" className="button button--outline button--add ">
         I'm hungry
       </Link>
     </div>
